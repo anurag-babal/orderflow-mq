@@ -67,7 +67,7 @@ orderflow-mq/
 8. Wrap-up: write `docs/phase-01-fundamentals.md`, `.gitignore` additions, update `README.md`; **commit and push to `main`**.
 
 **Relevant Context:** [`README.md`](README.md), [`.gitignore`](.gitignore) (already ignores `target/`; add IDE entries such as `.idea/`, `*.iml`, `.vscode/` if needed).
-**Status:** [-] in progress. Branch `phase-01-fundamentals`. Steps 1-6 done and confirmed. **Next: Step 7** (observe the flow in the UI).
+**Status:** [-] in progress. Branch `phase-01-fundamentals`. Steps 1-7 done and confirmed. **Next: wrap-up** (docs, README, .gitignore, push, merge, tag).
 **Resume notes:** Podman (not Docker) is used: run `podman machine start`, then `podman compose up -d`. Compose image is `docker.io/library/rabbitmq:3-management`. Parent pom uses Spring Boot 3.5.16, Java 21. Playground queue is `playground.queue` (durable), sent via the default exchange `""`. Spring AMQP connects lazily, so the queue only appears once something uses the connection (a listener forces it at startup). Verify progress any time with `git log --oneline` (commit messages are `phase-01 step-N: ...`).
 
 ---
