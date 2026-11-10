@@ -67,8 +67,17 @@ orderflow-mq/
 8. Wrap-up: write `docs/phase-01-fundamentals.md`, `.gitignore` additions, update `README.md`; **commit and push to `main`**.
 
 **Relevant Context:** [`README.md`](README.md), [`.gitignore`](.gitignore) (already ignores `target/`; add IDE entries such as `.idea/`, `*.iml`, `.vscode/` if needed).
-**Status:** [-] in progress. Branch `phase-01-fundamentals`. Steps 1-7 done and confirmed. **Next: wrap-up** (docs, README, .gitignore, push, merge, tag).
-**Resume notes:** Podman (not Docker) is used: run `podman machine start`, then `podman compose up -d`. Compose image is `docker.io/library/rabbitmq:3-management`. Parent pom uses Spring Boot 3.5.16, Java 21. Playground queue is `playground.queue` (durable), sent via the default exchange `""`. Spring AMQP connects lazily, so the queue only appears once something uses the connection (a listener forces it at startup). Verify progress any time with `git log --oneline` (commit messages are `phase-01 step-N: ...`).
+**Status:** [x] done. Branch `phase-01-fundamentals` (kept), merged into `main` with `--no-ff`, tag `phase-01-complete`. Notes: [`docs/phase-01-fundamentals.md`](docs/phase-01-fundamentals.md).
+**Context for Phase 2:**
+- Environment: macOS, **Podman** (not Docker). Run `podman machine start`, then `podman compose up -d`. Java 21, Maven 3.9.11.
+- Root [`pom.xml`](pom.xml) is the parent (`com.orderflow:orderflow-mq-parent:0.0.1-SNAPSHOT`, Spring Boot parent 3.5.16, `packaging=pom`). Its `<modules>` currently lists only `rabbit-playground`; Phase 2 replaces it with `order-service`.
+- [`docker-compose.yml`](docker-compose.yml) has one service, `rabbitmq` (`docker.io/library/rabbitmq:3-management`, container `orderflow-rabbitmq`, ports 5672/15672, named volume `rabbitmq_data`, healthcheck, `guest/guest`). Phase 2 adds Postgres here; use fully-qualified image names for Podman.
+- Package layout used in the playground, to be mirrored: `config` (`RabbitMQConfig`, `@ConfigurationProperties` records), `producer`, `consumer`, `api` (controller, request record, `GlobalExceptionHandler` returning `ProblemDetail`). Constructor injection via Lombok `@RequiredArgsConstructor`; config via `application.yml` with `${ENV:default}`.
+- The playground sends `String` payloads through the default exchange (`""`, routing key = queue name) using the `SimpleMessageConverter`. Phase 2 must introduce a named exchange `orderflow.exchange` (key `order.created`) and the JSON converter.
+- Observed facts worth reusing: Spring AMQP connects lazily; a handler that throws is requeued by default (retry/DLQ come in Phases 8-9); `202 Accepted` does not prove the broker stored the message (publisher confirms in Phase 7); an unroutable message on the default exchange is silently dropped (`routed:false`).
+- Testing style: `@WebMvcTest` + `@MockitoBean` for controllers; plain Mockito for the producer. `mvn clean verify` is green.
+- Housekeeping: `.gitignore` now ignores `.idea/`, `*.iml`, `.vscode/`. A progress table lives in `README.md` and must be updated at each phase end.
+- Delete the `rabbit-playground` module in Phase 2 (and remove it from the parent pom).
 
 ---
 
