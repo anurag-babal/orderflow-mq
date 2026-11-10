@@ -27,6 +27,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Bean Validation (Hibernate Validator): @NotBlank, @Size, @Valid on request bodies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!-- Compile-time code generation (@Slf4j, @RequiredArgsConstructor); not needed at runtime -->
         <dependency>
             <groupId>org.projectlombok</groupId>
