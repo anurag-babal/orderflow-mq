@@ -1,0 +1,24 @@
+services:
+  rabbitmq:
+    # Fully-qualified name: Podman has no default registry and would otherwise prompt for one.
+    image: docker.io/library/rabbitmq:3-management
+    container_name: orderflow-rabbitmq
+    hostname: orderflow-rabbitmq   # RabbitMQ stores its data under a directory named after the node/host name
+    ports:
+      - "5672:5672"     # AMQP: used by Spring Boot applications
+      - "15672:15672"   # Management UI + HTTP API: used by humans
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:

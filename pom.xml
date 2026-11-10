@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot's own parent: supplies dependency version management, plugin defaults, UTF-8, -parameters flag -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.16</version>
+        <relativePath/> <!-- always resolve from the repository, not from a local path -->
+    </parent>
+
+    <groupId>com.orderflow</groupId>
+    <artifactId>orderflow-mq-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging> <!-- this project only aggregates modules; it produces no jar -->
+    <name>orderflow-mq-parent</name>
+    <description>OrderFlow MQ - RabbitMQ learning project (multi-module parent)</description>
+
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+
+    <modules>
+        <module>rabbit-playground</module>
+    </modules>
+</project>

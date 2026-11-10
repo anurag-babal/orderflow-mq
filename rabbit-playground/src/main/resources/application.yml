@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: rabbit-playground
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: auto   # container acks on success, rejects on exception
+        prefetch: 10             # max unacked messages the broker pushes to this consumer
+        concurrency: 1           # consumer threads started at boot
+        max-concurrency: 1       # upper bound if the container scales up
+
+server:
+  port: 8080
+
+playground:
+  queue:
+    name: playground.queue
+
+logging:
+  level:
+    com.orderflow: DEBUG
